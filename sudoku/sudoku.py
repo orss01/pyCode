@@ -16,13 +16,15 @@ class Node():
     variables: list
     value: int
     box: int
+    checked: bool
 
     def __init__(self, value: int, box: int):
         self.variables = [1, 2, 3, 4, 5, 6, 7, 8, 9]
         self.value = value
         self.box = box
         self.delete(self.value)
-        if(value != 0):
+        self.checked = False
+        if(self.value != 0):
             self.variables = []
 
     def getValue(self) -> int:
@@ -31,14 +33,23 @@ class Node():
     def setValue(self, value: int) -> None:
         self.value = value
         self.variables = []
+
+    def setChecked(self) -> None:
+        self.checked = True
+
+    def getChecked(self) -> bool:
+        return self.checked
     
     def getVariables(self) -> list:
         return self.variables
+    
     def delete(self, variable: int) -> None:
         if variable in self.variables:
             self.variables.remove(variable)
+            
     def getBox(self) -> int:
         return self.box  
+    
     def toString(self) -> str:
         return ("value: %d, box: %d, Variables: " % (self.value, self.box)) + str(self.variables)
 
@@ -112,7 +123,7 @@ def printGrid(grid: list) -> None:
 def CSP(grid: list) -> bool:
     done: bool = False
     count: int = 0
-    while not done and count < 1000:
+    while not done and count < 100:
         count += 1
         done = True
         for i in range(9):
@@ -121,7 +132,7 @@ def CSP(grid: list) -> bool:
                     done = False
                     if len(grid[i][j].getVariables()) == 1:
                         grid[i][j].setValue(grid[i][j].getVariables()[0])
-                else:
+                elif not grid[i][j].getChecked():
                     node: Node = grid[i][j]
                     for k in range(9):
                         if k != i:
@@ -173,6 +184,7 @@ def CSP(grid: list) -> bool:
                             for m in range(6, 9):
                                 if n != i and m != j:
                                     grid[n][m].delete(node.getValue())
+                    grid[i][j].setChecked()
     return done
 
 
