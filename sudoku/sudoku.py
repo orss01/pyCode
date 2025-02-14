@@ -38,7 +38,9 @@ class Node():
         if variable in self.variables:
             self.variables.remove(variable)
     def getBox(self) -> int:
-        return self.box
+        return self.box  
+    def toString(self) -> str:
+        return ("value: %d, box: %d, Variables: " % (self.value, self.box)) + str(self.variables)
 
 def makeNode(i:int, num: int, grid: list, box: int) -> None:
     if num != 0:
@@ -53,9 +55,23 @@ def getGrid() -> list:
         print("Enter Row " + str(i + 1) + " (0 if blank)")
         grid.append([])
         uInput = input()
-        if len(uInput) < 9:
-            print("Not enough numbers, re-enter Row " + str(i))
-            uInput = input()
+        validLength: bool = False
+        validInput: bool = False
+        while not validLength or not validInput:
+            validLength = True
+            validInput = True
+            if len(uInput) < 9:
+                validLength = False
+                print("Not enough numbers, re-enter Row " + str(i + 1) + " (0 if blank)")
+                uInput = input()
+            else:
+                for c in range(9):
+                    if ord(uInput[c]) < 48 or ord(uInput[c]) > 57:
+                        validInput = False
+                if(not validInput):
+                    print("Not valid numbers, re-enter Row " + str(i + 1) + " (0 if blank)")
+                    uInput = input()
+
         for j in range(9):
             num: int = ord(uInput[j]) - 48
             if i < 3 and j < 3:
@@ -96,7 +112,7 @@ def printGrid(grid: list) -> None:
 def CSP(grid: list) -> bool:
     done: bool = False
     count: int = 0
-    while not done and count < 100000:
+    while not done and count < 1000:
         count += 1
         done = True
         for i in range(9):
@@ -167,6 +183,10 @@ def main() -> None:
         printGrid(grid)
     else:
         print("No Solution Found")
+    
+    for i in range(9):
+        for j in range(9):
+            print(grid[i][j].toString())
 
 
 if __name__ == '__main__':
