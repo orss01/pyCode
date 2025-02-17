@@ -52,14 +52,15 @@ def CSP(grid:list) -> bool:
     size:int = len(grid)
     for row in range(size):
         for col in range(size):
-            for value in (1, 10):
-                if not inRow(grid, value, row) and not inCol(grid, value, col) and not inBox(grid, value, row, col):
-                    grid[row][col] = value
-                    if CSP(grid):
-                        return True
-                    else:
-                        grid[row][col] = 0
-            return False
+            if grid[row][col] == 0:
+                for value in range(1, 10):
+                    if not inRow(grid, value, row) and not inCol(grid, value, col) and not inBox(grid, value, row, col):
+                        grid[row][col] = value
+                        if CSP(grid):
+                            return True
+                        else:
+                            grid[row][col] = 0
+                return False
     return True
 
 def main() -> None:
