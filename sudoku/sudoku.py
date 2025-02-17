@@ -59,32 +59,13 @@ def makeNode(i:int, num: int, grid: list, box: int) -> None:
     else:
         grid[i].append(Node(0, box))
 
-def getGrid() -> list:
+
+def getGrid(intGrid: list) -> list:
     grid: list = []
-
     for i in range(9):
-        print("Enter Row " + str(i + 1) + " (0 if blank)")
         grid.append([])
-        uInput = input()
-        validLength: bool = False
-        validInput: bool = False
-        while not validLength or not validInput:
-            validLength = True
-            validInput = True
-            if len(uInput) < 9:
-                validLength = False
-                print("Not enough numbers, re-enter Row " + str(i + 1) + " (0 if blank)")
-                uInput = input()
-            else:
-                for c in range(9):
-                    if ord(uInput[c]) < 48 or ord(uInput[c]) > 57:
-                        validInput = False
-                if(not validInput):
-                    print("Not valid numbers, re-enter Row " + str(i + 1) + " (0 if blank)")
-                    uInput = input()
-
         for j in range(9):
-            num: int = ord(uInput[j]) - 48
+            num: int = intGrid[i][j]
             if i < 3 and j < 3:
                 makeNode(i, num, grid, 1)
             elif i < 3 and j < 6:
@@ -189,17 +170,25 @@ def CSP(grid: list) -> bool:
 
 
 def main() -> None:
-    grid = getGrid()
-    solution: bool = CSP(grid)
-    if solution:
+    intgrid: list = [
+        [5, 3, 0, 0, 7, 0, 0, 0, 0],
+        [6, 0, 0, 1, 9, 5, 0, 0, 0],
+        [0, 9, 8, 0, 0, 0, 0, 6, 0],
+        [8, 0, 0, 0, 6, 0, 0, 0 ,3],
+        [4, 0, 0, 8, 0, 3, 0, 0, 1],
+        [7, 0, 0, 0, 2, 0, 0, 0, 6],
+        [0, 6, 0, 0, 0, 0, 2, 8, 0],
+        [0, 0, 0, 4, 1, 9, 0, 0, 5],
+        [0, 0, 0, 0, 8, 0, 0, 7, 9]
+    ]
+    grid = getGrid(intgrid)
+    printGrid(grid)
+    print()
+    if CSP(grid):
+        print("Solved Using CSP")
         printGrid(grid)
     else:
         print("No Solution Found")
-    
-    for i in range(9):
-        for j in range(9):
-            print(grid[i][j].toString())
-
 
 if __name__ == '__main__':
     main() 
